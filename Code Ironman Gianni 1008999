@@ -1,0 +1,83 @@
+/*
+Press 5 Gianni Mendonça Semedo 1008999 1008999@hr.nl
+ */
+
+let lightPositionA = 0    // Positie lampjes Team A
+let lightPositionB = 9    // Positie lampjes Team B
+let battleStatus = false  // Status van battle
+
+// Start positie servo
+crickit.servo1.setAngle(90)
+
+// Loops A and B
+if (lightPositionA > 4) {
+    lightPositionA = 0
+}
+if (lightPositionB < 5) {
+    lightPositionB = 9
+}
+
+// Team A code
+input.buttonA.onEvent(ButtonEvent.Click, function () {
+    if (battleStatus) {
+
+        light.setPixelColor(lightPositionA, light.rgb(0, 0, 255))
+        if (lightPositionA < 5) {
+            lightPositionA += 1
+        }
+        if (lightPositionA === 5) {
+            // Win A scene
+            light.showRing("blue blue blue blue blue blue blue blue blue blue")
+            crickit.servo1.setAngle(0)
+            pause(1250)
+            // Reset scene
+            light.showRing("black black black black black black black black black black")
+            battleStatus = false
+            crickit.servo1.setAngle(90)
+            lightPositionA = 0
+            lightPositionB = 9
+        }
+    }
+    console.log(lightPositionA)
+})
+
+//Team B code
+input.buttonB.onEvent(ButtonEvent.Click, function () {
+    if (battleStatus) {
+
+        light.setPixelColor(lightPositionB, light.rgb(255, 0, 0))
+        if (lightPositionB > 4) {
+            lightPositionB += -1
+        }
+        if (lightPositionB === 4) {
+            // Win B scene
+            light.showRing("red red red red red red red red red red")
+            crickit.servo1.setAngle(180)
+            pause(1250)
+            // Reset scene
+            light.showRing("black black black black black black black black black black")
+            battleStatus = false
+            crickit.servo1.setAngle(90)
+            lightPositionA = 0
+            lightPositionB = 9
+        }
+    }
+})
+// Start Scene
+input.touchA6.onEvent(ButtonEvent.Click, function () {
+    if (!battleStatus) {
+        light.showRing("blue blue blue blue blue red red red red red")
+        pause(500)
+        light.showRing("black blue blue blue blue red red red red black")
+        pause(500)
+        light.showRing("black black blue blue blue red red red black black")
+        pause(500)
+        light.showRing("black black black blue blue red red black black black")
+        pause(500)
+        light.showRing("black black black black blue red black black black black")
+        pause(500)
+        light.showRing("black black black black black black black black black black")
+        battleStatus = true
+        console.log(`Status van battle is ${battleStatus}`)
+    }
+})
